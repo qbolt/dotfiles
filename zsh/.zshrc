@@ -116,8 +116,9 @@ compinit
 alias vim="nvim"
 alias ep="nvim ~/.zshrc"
 alias rp="source ~/.zshrc"
-alias ls="ls -al --color"
-export PATH=$PATH:/usr/local/bin/:~/.local/bin/:/usr/local/
-
+alias ls="ls -Al --color"
+export MANPAGER='nvim +Man!'
+export PATH=$PATH:/usr/local/bin/:~/.local/bin/:/usr/local/:~/.cargo/bin/
 
 export N_PREFIX="$HOME/.n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+fpath+=${ZDOTDIR:-~}/.zsh_functions
