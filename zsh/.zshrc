@@ -3,7 +3,6 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -70,7 +69,7 @@ ZSH_THEME="rkj-repos"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git zsh-autosuggestions z)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -88,6 +87,8 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 
+autoload -Uz compinit
+compinit -u
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
@@ -109,16 +110,30 @@ bindkey -v
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/qbolt/.zshrc'
 
-autoload -Uz compinit
-compinit
 # End of lines added by compinstall
 
 alias vim="nvim"
 alias ep="nvim ~/.zshrc"
 alias rp="source ~/.zshrc"
 alias ls="ls -Al --color"
+
+alias ls='eza $eza_params'
+alias l='eza --git-ignore $eza_params'
+alias ll='eza --all --header --long $eza_params'
+alias llm='eza --all --header --long --sort=modified $eza_params'
+alias la='eza -lbhHigUmuSa'
+alias lx='eza -lbhHigUmuSa@'
+alias lt='eza --tree $eza_params'
+alias tree='eza --tree $eza_params'
+
+alias ch="cht.sh"
+alias cd="z"
+
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+
 export MANPAGER='nvim +Man!'
-export PATH=$PATH:/usr/local/bin/:~/.local/bin/:/usr/local/:~/.cargo/bin/
+export PATH=$PATH:/usr/local/bin/:~/.local/bin/:/usr/local/:~/.cargo/bin/:~/bin:$GOPATH/bin:$GOROOT/bin
 
 export N_PREFIX="$HOME/.n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
 fpath+=${ZDOTDIR:-~}/.zsh_functions
