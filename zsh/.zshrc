@@ -1,139 +1,181 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+# ~~~~~~~~~~~~~~~ Path configuration ~~~~~~~~~~~~~~~~~~~~~~~~
+setopt extended_glob null_glob
+# inside .zshrc
+path=(
+    $path                           # Keep existing PATH entries
+    $HOME/bin
+    $HOME/.local/bin
+    $SCRIPTS
+    /usr/local/bin
+    /opt/homebrew/bin
+)
 
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="rkj-repos"
+# Remove duplicate entries and non-existent directories
+typeset -U path
+path=($^path(N-/))
 
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+export PATH
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
 
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+# ~~~~~~~~~~~~~~~ SSH ~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
+# Using GPG + YubiKey for ssh.
 
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions z)
-
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-autoload -Uz compinit
-compinit -u
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
+# export GPG_TTY="$(tty)"
+# export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 #
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-# HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
-setopt autocd extendedglob nomatch notify
-unsetopt beep
-bindkey -v
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/qbolt/.zshrc'
+# gpgconf --launch gpg-agent
+# gpg-connect-agent updatestartuptty /bye > /dev/null 2>&1
 
-# End of lines added by compinstall
 
-alias vim="nvim"
-alias ep="nvim ~/.zshrc"
+# ~~~~~~~~~~~~~~~ Environment Variables ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+# Set to superior editing mode
+
+export VISUAL=nvim
+export EDITOR=nvim
+export TERM="tmux-256color"
+
+export BROWSER="firefox"
+
+# Directories
+
+export REPOS="$HOME/Repos"
+export GITUSER="mischavandenburg"
+export GHREPOS="$REPOS/github.com/$GITUSER"
+export DOTFILES="$GHREPOS/dotfiles"
+export LAB="$GHREPOS/lab"
+export SCRIPTS="$DOTFILES/scripts"
+export ICLOUD="$HOME/icloud"
+export ZETTELKASTEN="$HOME/Zettelkasten"
+
+# Go related. In general all executables and scripts go in .local/bin
+
+export GOBIN="$HOME/.local/bin"
+export GOPRIVATE="github.com/$GITUSER/*,gitlab.com/$GITUSER/*"
+# export GOPATH="$HOME/.local/share/go"
+export GOPATH="$HOME/go/"
+
+
+# ~~~~~~~~~~~~~~~ History ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+HISTFILE=~/.zsh_history
+HISTSIZE=100000
+SAVEHIST=100000
+
+setopt HIST_IGNORE_SPACE  # Don't save when prefixed with space
+setopt HIST_IGNORE_DUPS   # Don't save duplicate lines
+setopt SHARE_HISTORY      # Share history between sessions
+
+
+# ~~~~~~~~~~~~~~~ Prompt ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+PURE_GIT_PULL=0
+
+
+if [[ "$OSTYPE" == darwin* ]]; then
+  fpath+=("$(brew --prefix)/share/zsh/site-functions")
+else
+  fpath+=($HOME/.zsh/pure)
+fi
+
+autoload -U promptinit; promptinit
+prompt pure
+
+
+# ~~~~~~~~~~~~~~~ Aliases ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+alias v=nvim
+alias vim=nvim
+
+alias scripts='cd $SCRIPTS'
+alias cdblog="cd ~/websites/blog"
+alias c="clear"
+
+# Repos
+alias lab='cd $LAB'
+alias dot='cd $GHREPOS/dotfiles'
+alias repos='cd $REPOS'
+alias ghrepos='cd $GHREPOS'
+alias gr='ghrepos'
+alias cdgo='cd $GHREPOS/go/'
+
+# Homelab
+alias homelab='cd $GHREPOS/homelab/'
+alias hl='homelab'
+
+# ls
+alias ls='ls --color=auto'
+alias la='ls -lathr'
+# alias la='exa -laghm@ --all --icons --git --color=always'
+
+
+# finds all files recursively and sorts by last modification, ignore hidden files
+alias lastmod='find . -type f -not -path "*/\.*" -exec ls -lrt {} +'
+
+alias t='tmux'
+alias e='exit'
+
+# Git
+
+alias gp='git pull'
+alias gs='git status'
+alias lg='lazygit'
+
+
+# Zettelkasten
+
+alias in="cd \$ZETTELKASTEN/0\ Inbox/"
+alias cdzk="cd \$ZETTELKASTEN"
+
+
+# Kubernetes
+
+alias k='kubectl'
+
+alias kgp='kubectl get pods'
+alias kc='kubectx'
+alias kn='kubens'
+
+alias fgk='flux get kustomizations'
+
+# Pass
+
+alias pc='pass show -c'
+
+
+# ~~~~~~~~~~~~~~~ Sourcing ~~~~~~~~~~~~~~~~~~~~~~~~
+
+source <(fzf --zsh)
+
+
+# ~~~~~~~~~~~~~~~ Completion ~~~~~~~~~~~~~~~~~~~~~~~~
+fpath+=~/.zfunc
+
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+zle-line-init() {}
+bindkey '^l' autosuggest-accept
+# Fix zsh autosuggestions keybind for arrow keys
+bindkey '^k' history-beginning-search-backward
+bindkey '^j' history-beginning-search-forward
+
+# Example to install completion:
+# talosctl completion zsh > ~/.zfunc/_talosctl
+
+# ~~~~~~~~~~~~~~~ Misc ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+alias lg="lazygit"
+alias ep="vim ~/.zshrc"
 alias rp="source ~/.zshrc"
-alias ls="ls -Al --color"
 
-alias ls='eza $eza_params'
-alias l='eza --git-ignore $eza_params'
-alias ll='eza --all --header --long $eza_params'
-alias llm='eza --all --header --long --sort=modified $eza_params'
-alias la='eza -lbhHigUmuSa'
-alias lx='eza -lbhHigUmuSa@'
-alias lt='eza --tree $eza_params'
-alias tree='eza --tree $eza_params'
+cht() { curl cheat.sh/$1; }
+alias ch=cht
 
-alias ch="cht.sh"
-alias cd="z"
-
-export GOROOT=/usr/local/go
-export GOPATH=$HOME/go
-
-export MANPAGER='nvim +Man!'
-export PATH=$PATH:/usr/local/bin/:~/.local/bin/:/usr/local/:~/.cargo/bin/:~/bin:$GOPATH/bin:$GOROOT/bin
-
-export N_PREFIX="$HOME/.n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
-fpath+=${ZDOTDIR:-~}/.zsh_functions
