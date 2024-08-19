@@ -149,6 +149,12 @@ alias fgk='flux get kustomizations'
 
 alias pc='pass show -c'
 
+# cd
+eval "$(zoxide init zsh)"
+alias cd="z"
+
+# cat 
+alias cat="bat"
 
 # ~~~~~~~~~~~~~~~ Sourcing ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -170,11 +176,12 @@ bindkey '^j' history-beginning-search-forward
 
 # ~~~~~~~~~~~~~~~ Misc ~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-
 alias lg="lazygit"
 alias ep="vim ~/.zshrc"
 alias rp="source ~/.zshrc"
+alias ls="eza --git --git-repos -l -a --color=always --icons"
+
+eval $(thefuck --alias fk)
 
 cht() { curl cheat.sh/$1; }
 alias ch=cht
