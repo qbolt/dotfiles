@@ -1,6 +1,6 @@
 # ~~~~~~~~~~~~~~~ Path configuration ~~~~~~~~~~~~~~~~~~~~~~~~
 setopt extended_glob null_glob
-# inside .zshrc
+
 path=(
     $path                           # Keep existing PATH entries
     $HOME/bin
@@ -152,9 +152,17 @@ alias pc='pass show -c'
 # cd
 eval "$(zoxide init zsh)"
 alias cd="z"
+alias -g ...="../../"
+alias -g ....="../../../"
+alias -g .....="../../../../"
+alias -g ......="../../../../../"
+alias -g .......="../../../../../../"
 
 # cat 
 alias cat="bat"
+
+# fzf 
+alias f='fzf --preview="bat --color=always {}"'
 
 # ~~~~~~~~~~~~~~~ Sourcing ~~~~~~~~~~~~~~~~~~~~~~~~
 
